@@ -8,7 +8,7 @@ const HeroesLayout = () => {
 
         <CustomNavigation/>
 
-        <Outlet/>
+        <Outlet/> {/*Salida de la ruta*/}
       </div>
     </div>
   )

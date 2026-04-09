@@ -12,7 +12,6 @@ const CustomPagination = ({totalPages}: CustomPaginationProps) => {
 
     const page = searchParams.get('page') ?? '1';
 
-
     return (
         <div className="flex items-center justify-center space-x-2">
             <Button variant="outline" size="sm" 

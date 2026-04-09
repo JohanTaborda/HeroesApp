@@ -1,4 +1,5 @@
 import  { TabsList, TabsTrigger, TabsContent, Tabs } from "@/components/ui/tabs"
+import useSummary from "@/hooks/useSummary";
 import { useMemo, type JSX } from "react"
 import { useSearchParams } from "react-router"
 
@@ -9,6 +10,7 @@ interface HeroTabsProps{
 const HeroTabs = ({heroGridComponent}: HeroTabsProps) => {
 
     const [searchParams, setSearchParams] = useSearchParams('');
+    const {data: heroSummary} = useSummary();
 
     const activeTab = searchParams.get('tab') ?? 'all';
 
@@ -25,10 +27,12 @@ const HeroTabs = ({heroGridComponent}: HeroTabsProps) => {
                 <TabsTrigger value="all" 
                     onClick={() => setSearchParams((prev) => {
                         prev.set('tab', 'all');
+                        prev.set('category', 'all');
+                        prev.set('page', '1');
                         return prev
                     })}
                 >
-                    All Characters (16)
+                    All Characters ({heroSummary?.totalHeroes})
                 </TabsTrigger>
                 
                 <TabsTrigger value="favorites" className="flex items-center gap-2" 
@@ -42,20 +46,24 @@ const HeroTabs = ({heroGridComponent}: HeroTabsProps) => {
 
                 <TabsTrigger value="heroes" 
                     onClick={() => setSearchParams((prev) => {
-                        prev.set('tab', 'heroes')
+                        prev.set('tab', 'heroes');
+                        prev.set('category', 'hero');
+                        prev.set('page', '1');
                         return prev
                     })}
                 >
-                    Heroes (12)
+                    Heroes ({heroSummary?.heroCount})
                 </TabsTrigger>
 
                 <TabsTrigger value="villains" 
                     onClick={() => setSearchParams((prev) => {
-                        prev.set('tab', 'villains')
+                        prev.set('tab', 'villains');
+                        prev.set('category', 'villain');
+                        prev.set('page', '1');
                         return prev
                     })}
                 >
-                    Villains (2)
+                    Villains ({heroSummary?.villainCount})
                 </TabsTrigger>
             </TabsList>
 
@@ -65,17 +73,16 @@ const HeroTabs = ({heroGridComponent}: HeroTabsProps) => {
             </TabsContent>
             <TabsContent value="favorites">
                 {/*Todos los personajes favoritos*/}
-                <h1>Favoritos</h1>
                 {/* {heroGridComponent} */}
             </TabsContent>
             <TabsContent value="heroes">
                 {/*Todos los personajes heroes*/}
-                <h1>Heroes</h1>
+                {heroGridComponent}
                 {/* {heroGridComponent} */}
             </TabsContent>
             <TabsContent value="villains">
                 {/*Todos los personajes villanos*/}
-                <h1>Villanos</h1>
+                {heroGridComponent}
                 {/* {heroGridComponent} */}
             </TabsContent>
         </Tabs>
