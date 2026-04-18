@@ -1,13 +1,20 @@
-import React from "react"
+import React, { use } from "react"
 import HeroStatCard from "./HeroStatCard"
 import useSummary from "@/hooks/useSummary"
 
 import { Badge } from "@/components/ui/badge"
 import { Heart, Trophy, Users, Zap } from "lucide-react"
+import { FavoriteHeroContext } from "@/App/context/FavoritesHeroContext"
 
-const HeroStats = React.memo(({}) => {
+const HeroStats = React.memo(() => {
 
     const {data: heroSummary} = useSummary(); //Utilizamos el customHook
+
+    const {favoriteCount} = use(FavoriteHeroContext);
+
+    if(!heroSummary){
+        return <div>Cargando...</div>
+    }
 
     const statsHero = [
         {
@@ -33,8 +40,8 @@ const HeroStats = React.memo(({}) => {
             children: (
                 <>
                     {/* TODO: Tenemos que calcular este valor */}
-                    <div className="text-2xl font-bold text-red-600">3</div>
-                    <p className="text-xs text-muted-foreground">18.8% of total</p>
+                    <div className="text-2xl font-bold text-red-600">{favoriteCount}</div>
+                    <p className="text-xs text-muted-foreground">{(favoriteCount / heroSummary?.totalHeroes) * 100}% of total</p>
                 </>
             )
         },

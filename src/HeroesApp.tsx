@@ -2,15 +2,18 @@ import { RouterProvider } from "react-router"
 import { AppRoutes } from "./routes/AppRoutes"
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query"
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import FavoritesHeroProvider from "./App/context/FavoritesHeroContext";
 
 const queryClient = new QueryClient();
 
 const HeroesApp = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={AppRoutes}/>
+      <FavoritesHeroProvider>
+        <RouterProvider router={AppRoutes}/>
 
-      <ReactQueryDevtools initialIsOpen={false} />
+        <ReactQueryDevtools initialIsOpen={false} />
+      </FavoritesHeroProvider>
     </QueryClientProvider>
   )
 }

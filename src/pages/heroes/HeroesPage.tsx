@@ -1,4 +1,4 @@
-import { useParams } from "react-router"
+import { Navigate, useParams } from "react-router"
 import { useQuery } from "@tanstack/react-query"
 import { getHeroById } from "@/App/actions/get-heroes-by-page.action"
 import { Badge } from "@/components/ui/badge"
@@ -12,13 +12,24 @@ const HeroesPage = () => {
 
   const {idSlug = ''} = useParams(); //Recolectamos el parametro de la URL
 
-  const {data} = useQuery({ //Hacemos una petición useQuery a la función de getHeroById
+  const {data, isError} = useQuery({ //Hacemos una petición useQuery a la función de getHeroById
     queryKey: [`${idSlug}`],
     queryFn: () => getHeroById(idSlug),
+    retry: false,
     staleTime: 1000 * 60 * 5 
   })
 
-  if(!data) return;
+  if(isError){
+    return <Navigate to={"/"}/>
+  }
+
+  if(!data) {
+    return(
+      <div>
+        Cargando...
+      </div>
+    )
+  };
 
   const totalPower =
     data?.strength + data?.intelligence + data?.speed + data?.durability

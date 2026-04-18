@@ -6,6 +6,8 @@ import { Progress } from "@/components/ui/progress"
 import type { Hero } from "@/App/types/TypesHero.response"
 import { cn } from "@/lib/utils"
 import { useNavigate } from "react-router"
+import { FavoriteHeroContext } from "@/App/context/FavoritesHeroContext"
+import { use } from "react"
 
 interface HeroGridCardProps{
   dataHero: Hero
@@ -14,6 +16,8 @@ interface HeroGridCardProps{
 const HeroGridCard = ({dataHero}: HeroGridCardProps) => {
 
   const navigate = useNavigate();
+
+  const {isFavorite, toggleFavorite} = use(FavoriteHeroContext);
 
   const handleClickNavigate = () => {
     navigate(`/heroes/${dataHero.slug}`)
@@ -41,8 +45,10 @@ const HeroGridCard = ({dataHero}: HeroGridCardProps) => {
             <Badge className="absolute top-3 right-3 text-xs bg-blue-600 text-white">{dataHero.universe}</Badge>
 
             {/* Favorite button */}
-            <Button size="sm" variant="ghost" className="absolute bottom-3 right-3 bg-white/90 hover:bg-white">
-              <Heart className="h-4 w-4 -red-500 text-red-500" />
+            <Button size="sm" variant="ghost" className="absolute bottom-3 right-3 bg-white/90 hover:bg-white"
+              onClick={() => toggleFavorite(dataHero)}
+            >
+              <Heart className={`h-4 w-4 ${isFavorite(dataHero) ? "fill-red-500 text-red-500" : "text-gray-500"}`} /> 
             </Button>
 
             {/* View details button */}

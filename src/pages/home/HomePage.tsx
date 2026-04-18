@@ -16,8 +16,9 @@ export const HomePage = () => {
   const limit = searchParams.get('limit') ?? 6;
   const category = searchParams.get('category') ?? "all";
 
-
   const {data: heroesResponse} = useHero(+page,+limit, category);
+
+  console.log(category)
 
   return (
     <>
@@ -40,7 +41,11 @@ export const HomePage = () => {
         /> 
 
         {/* Pagination */}
-        <CustomPagination totalPages={heroesResponse?.pages ?? 1}/>
+        {category !== "favorites" && 
+          (
+            <CustomPagination totalPages={heroesResponse?.pages ?? 1}/>
+          )
+        }
 
       </>
     </>

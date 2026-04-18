@@ -1,6 +1,8 @@
+import { FavoriteHeroContext } from "@/App/context/FavoritesHeroContext";
 import  { TabsList, TabsTrigger, TabsContent, Tabs } from "@/components/ui/tabs"
 import useSummary from "@/hooks/useSummary";
-import { useMemo, type JSX } from "react"
+import HeroGrid from "./HeroGrid";
+import { use, useMemo, type JSX } from "react"
 import { useSearchParams } from "react-router"
 
 interface HeroTabsProps{
@@ -9,6 +11,7 @@ interface HeroTabsProps{
 
 const HeroTabs = ({heroGridComponent}: HeroTabsProps) => {
 
+    const {favoriteCount, favoritesHero} = use(FavoriteHeroContext);
     const [searchParams, setSearchParams] = useSearchParams('');
     const {data: heroSummary} = useSummary();
 
@@ -38,10 +41,11 @@ const HeroTabs = ({heroGridComponent}: HeroTabsProps) => {
                 <TabsTrigger value="favorites" className="flex items-center gap-2" 
                     onClick={() => setSearchParams((prev) => {
                         prev.set('tab', 'favorites')
+                        prev.set('category', 'favorites')
                         return prev
                     })}
                 >
-                    Favorites (3)
+                    Favorites ({favoriteCount})
                 </TabsTrigger>
 
                 <TabsTrigger value="heroes" 
@@ -73,7 +77,11 @@ const HeroTabs = ({heroGridComponent}: HeroTabsProps) => {
             </TabsContent>
             <TabsContent value="favorites">
                 {/*Todos los personajes favoritos*/}
-                {/* {heroGridComponent} */}
+                {
+                    favoritesHero.length > 0
+                        ? <HeroGrid heroes={favoritesHero} />
+                        : <p className="text-center text-muted-foreground py-8">No hay favoritos aun.</p>
+                }
             </TabsContent>
             <TabsContent value="heroes">
                 {/*Todos los personajes heroes*/}
