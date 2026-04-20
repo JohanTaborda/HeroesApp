@@ -9,44 +9,38 @@ import CustomPagination from "@/components/custom/CustomPagination"
 import CustomBreadcrumbs from "@/components/custom/CustomBreadcrumbs"
 
 export const HomePage = () => {
+  const [searchParams] = useSearchParams()
 
-  const [searchParams] = useSearchParams();
+  const page = searchParams.get("page") ?? 1 //Aplicamos el nullish coalescing
+  const limit = searchParams.get("limit") ?? 6
+  const category = searchParams.get("category") ?? "all"
 
-  const page = searchParams.get('page') ?? 1; //Aplicamos el nullish coalescing
-  const limit = searchParams.get('limit') ?? 6;
-  const category = searchParams.get('category') ?? "all";
-
-  const {data: heroesResponse} = useHero(+page,+limit, category);
-
-  console.log(category)
+  const { data: heroesResponse } = useHero(+page, +limit, category)
 
   return (
     <>
       <>
-
         {/* Header */}
-        <CustomHeader title="Superhero Universe" description="Discover, explore, and manage your favorite superheroes and villains"/>
+        <CustomHeader
+          title="Superhero Universe"
+          description="Discover, explore, and manage your favorite superheroes and villains"
+        />
 
         {/*Breadcrumbs*/}
-        <CustomBreadcrumbs currentPage="Súper Héroes"/>
+        <CustomBreadcrumbs currentPage="Súper Héroes" />
 
         {/* Stats Dashboard */}
-        <HeroStats/>
+        <HeroStats />
 
         {/* Tabs */}
-        <HeroTabs heroGridComponent=
-          {
-            <HeroGrid heroes={heroesResponse?.heroes ?? []}/>
-          }
-        /> 
+        <HeroTabs
+          heroGridComponent={<HeroGrid heroes={heroesResponse?.heroes ?? []} />}
+        />
 
         {/* Pagination */}
-        {category !== "favorites" && 
-          (
-            <CustomPagination totalPages={heroesResponse?.pages ?? 1}/>
-          )
-        }
-
+        {category !== "favorites" && (
+          <CustomPagination totalPages={heroesResponse?.pages ?? 1} />
+        )}
       </>
     </>
   )

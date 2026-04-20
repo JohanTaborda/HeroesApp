@@ -9,45 +9,44 @@ import { useSearchParams } from "react-router"
 import HeroGrid from "@/modules/heroesModules/HeroGrid"
 
 const SearchPage = () => {
+  const [searchParams] = useSearchParams()
 
-  const [searchParams] = useSearchParams();
+  const name = searchParams.get("name") ?? undefined
+  const strength = searchParams.get("strength") ?? undefined
 
-  const name = searchParams.get('name') ?? undefined;
-  const strength = searchParams.get('strength') ?? undefined;
-
-
-  const {data} = useQuery({
-    queryKey: ["name", {name, strength}],
-    queryFn: () => searchHeroAction({name, strength}),
+  const { data } = useQuery({
+    queryKey: ["name", { name, strength }],
+    queryFn: () => searchHeroAction({ name, strength }),
     staleTime: 6000 * 5,
-    retry:false
-  }); 
+    retry: false,
+  })
 
-  if(!data) return;
+  if (!data) return
 
   return (
     <>
-      <CustomHeader 
-        title="Search Superhero Universe" 
+      <CustomHeader
+        title="Search Superhero Universe"
         description="Discover, explore, and manage your favorite superheroes and villains"
       />
 
-      <CustomBreadcrumbs currentPage="Buscador de Héroes"
+      <CustomBreadcrumbs
+        currentPage="Buscador de Héroes"
         breadCrumbs={[
-          {label: "home",to: "/"},
-          {label: "home1",to: "/"},
-          {label: "home2",to: "/"},
+          { label: "home", to: "/" },
+          { label: "home1", to: "/" },
+          { label: "home2", to: "/" },
         ]}
       />
 
       {/* Stats Dashboard */}
-      <HeroStats/>
+      <HeroStats />
 
       {/* Search */}
-      <SearchModule/>
+      <SearchModule />
 
-      {/*HeroGrid */} 
-      <HeroGrid heroes={data}/>
+      {/*HeroGrid */}
+      <HeroGrid heroes={data} />
     </>
   )
 }
